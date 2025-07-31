@@ -2,13 +2,14 @@ use clap::{Parser, Subcommand, ValueEnum};
 
 mod auth;
 mod inventory;
+mod persistence;
 mod purchase;
 mod report;
 mod sales;
-mod persistence;
 
 use crate::auth::Auth;
 use crate::inventory::{Inventory, Product};
+use crate::persistence::{load_inventory, load_purchases, load_sales, save_inventory, save_purchases, save_sales};
 use crate::purchase::{Purchase, Purchases};
 use crate::report::Reporter;
 use crate::sales::{Sale, Sales};
@@ -79,17 +80,13 @@ enum ReportType {
     Purchase,
 }
 
-fn main() {
-    if let Err(err) = Auth::authenticate() {
-        println!("{}", err);
-        return;
-    };
-
+fn main() -> Result<(), Box<dyn std::error::Error>> {
     println!("=== Store Management System ===");
+    Auth::authenticate()?;
 
-    let mut inventory: Vec<Product> = Vec::new();
-    let mut sales: Vec<Sale> = Vec::new();
-    let mut purchases: Vec<Purchase> = Vec::new();
+    let mut inventory: Vec<Product> = load_inventory()?;
+    let mut sales: Vec<Sale> = load_sales()?;
+    let mut purchases: Vec<Purchase> = load_purchases()?;
 
     match Cli::parse().command {
         Commands::AddProduct {
@@ -169,4 +166,9 @@ fn main() {
             }
         },
     }
+
+    save_inventory(&inventory)?;
+    save_sales(&sales)?;
+    save_purchases(&purchases)?;
+    Ok(())
 }
