@@ -24,7 +24,6 @@ pub trait Purchases {
         inventory: &mut Vec<Product>,
     ) -> Result<Purchase, String>;
     fn get_total_purchases(&self) -> f64;
-    fn get_purchases(&self, product_name: &str) -> Option<Vec<Purchase>>;
 }
 
 impl Purchases for Vec<Purchase> {
@@ -73,18 +72,5 @@ impl Purchases for Vec<Purchase> {
     fn get_total_purchases(&self) -> f64 {
         self.iter()
             .fold(0.0, |acc, purchase| acc + purchase.total_cost)
-    }
-
-    fn get_purchases(&self, product_name: &str) -> Option<Vec<Purchase>> {
-        let purchases: Vec<Purchase> = self
-            .iter()
-            .filter(|p| p.product_name == product_name)
-            .cloned()
-            .collect();
-
-        match purchases.is_empty() {
-            true => None,
-            false => Some(purchases),
-        }
     }
 }

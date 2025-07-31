@@ -1,6 +1,6 @@
 use crate::inventory::Product;
-use crate::purchase::Purchase;
-use crate::sales::Sale;
+use crate::purchase::{Purchase, Purchases};
+use crate::sales::{Sale, Sales};
 
 pub struct Reporter;
 
@@ -26,13 +26,13 @@ impl Reporter {
 
         for sale in sales {
             report.push_str(&format!(
-                "Product: {} | Qty: {} | Price: ${:.2} | Total: ${:.2} | Profit: ${:.2}\n",
-                sale.product_name, sale.quantity, sale.sale_price, sale.total, sale.profit
+                "Product: {} | Qty: {} | Price: ${:.2} | Total: ${:.2} | Profit: ${:.2}\n | Date: {:?}\n",
+                sale.product_name, sale.quantity, sale.sale_price, sale.total, sale.profit, sale.timestamp
             ));
         }
 
-        let total_sales: f64 = sales.iter().map(|s| s.total).sum();
-        let total_profit: f64 = sales.iter().map(|s| s.profit).sum();
+        let total_sales: f64 = sales.get_total_sales();
+        let total_profit: f64 = sales.get_total_profit();
         report.push_str(&format!("\nTotal Sales: ${:.2} | Total Profit: ${:.2}\n", total_sales, total_profit));
         report
     }
@@ -43,12 +43,12 @@ impl Reporter {
 
         for purchase in purchases {
             report.push_str(&format!(
-                "Product: {} | Qty: {} | Unit Price: ${:.2} | Total: ${:.2}\n",
-                purchase.product_name, purchase.quantity, purchase.purchase_price, purchase.total_cost
+                "Product: {} | Qty: {} | Unit Price: ${:.2} | Total: ${:.2}\n, Date: {:?}\n",
+                purchase.product_name, purchase.quantity, purchase.purchase_price, purchase.total_cost, purchase.timestamp
             ));
         }
 
-        let total_cost: f64 = purchases.iter().map(|p| p.total_cost).sum();
+        let total_cost: f64 = purchases.get_total_purchases();
         report.push_str(&format!("\nTotal Purchase Cost: ${:.2}\n", total_cost));
         report
     }

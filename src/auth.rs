@@ -10,7 +10,7 @@ impl Auth {
         let username = Self::read_input("Username:")?;
         let password = Self::read_input("Password:")?;
 
-        if (username == "store_manager" && password == "pass1234") {
+        if username == "store_manager" && password == "pass1234" {
             Ok(())
         } else {
             Err("Invalid username or password".to_string())
