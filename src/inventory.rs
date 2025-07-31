@@ -1,6 +1,7 @@
 use validator::Validate;
 
-#[derive(Validate)]
+#[derive(Validate, Debug)]
+#[derive(Clone)]
 pub struct Product {
     #[validate(length(min = 1, max = 50, message = "Product name must be 1-50 characters"))]
     pub name: String,
@@ -12,7 +13,7 @@ pub struct Product {
     pub description: String,
 }
 
-trait Inventory {
+pub trait Inventory {
     fn add_item(
         &mut self,
         name: &str,

@@ -15,10 +15,10 @@ pub struct Sale {
     pub(crate) timestamp: SystemTime,
 }
 
-trait Sales {
+pub trait Sales {
     fn record_sale(
         &mut self,
-        product: &Product,
+        product_name: &str,
         quantity: u32,
         sale_price: f64,
         inventory: &mut Vec<Product>,
@@ -31,31 +31,31 @@ trait Sales {
 impl Sales for Vec<Sale> {
     fn record_sale(
         &mut self,
-        product: &Product,
+        product_name: &str,
         quantity: u32,
         sale_price: f64,
         inventory: &mut Vec<Product>,
     ) -> Result<Sale, String> {
         let inventory_product = inventory
             .iter_mut()
-            .find(|p| p.name == product.name)
-            .ok_or_else(|| format!("Product {} not found", product.name))?;
+            .find(|p| p.name == product_name)
+            .ok_or_else(|| format!("Product {} not found", product_name))?;
 
         if inventory_product.quantity < quantity {
             return Err(format!(
                 "Insufficient stock for '{}'. Available: {}, Requested: {}",
-                product.name, inventory_product.quantity, quantity
+                inventory_product.name, inventory_product.quantity, quantity
             ));
         }
 
         inventory_product.quantity -= quantity;
 
         let sale = Sale {
-            product_name: product.name.clone(),
+            product_name: inventory_product.name.clone(),
             quantity,
             sale_price,
             profit: {
-                let cost = product.price * quantity as f64;
+                let cost = inventory_product.price * quantity as f64;
                 let sale_total = sale_price * quantity as f64;
                 sale_total - cost
             },
