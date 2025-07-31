@@ -87,7 +87,7 @@ enum ReportType {
 
 fn main() -> Result<(), Box<dyn std::error::Error>> {
     println!("=== Store Management System ===");
-    // Auth::authenticate()?;
+    Auth::authenticate()?;
 
     let mut inventory: Vec<Product> = load_inventory()?;
     let mut sales: Vec<Sale> = load_sales()?;

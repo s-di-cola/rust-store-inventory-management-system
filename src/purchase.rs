@@ -24,7 +24,6 @@ pub trait Purchases {
         description: &str,
         inventory: &mut Vec<Product>,
     ) -> Result<Purchase, String>;
-    fn get_total_purchases(&self) -> f64;
 }
 
 impl Purchases for Vec<Purchase> {
@@ -68,10 +67,5 @@ impl Purchases for Vec<Purchase> {
         }
         self.push(purchase.clone());
         Ok(purchase)
-    }
-
-    fn get_total_purchases(&self) -> f64 {
-        self.iter()
-            .fold(0.0, |acc, purchase| acc + purchase.total_cost)
     }
 }

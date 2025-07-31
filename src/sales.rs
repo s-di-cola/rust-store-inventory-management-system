@@ -25,8 +25,6 @@ pub trait Sales {
         inventory: &mut Vec<Product>,
     ) -> Result<Sale, String>;
 
-    fn get_total_sales(&self) -> f64;
-    fn get_total_profit(&self) -> f64;
 }
 
 impl Sales for Vec<Sale> {
@@ -68,13 +66,5 @@ impl Sales for Vec<Sale> {
             .map_err(|errors| format!("Validation errors: {:#?}", errors))?;
         self.push(sale.clone());
         Ok(sale)
-    }
-
-    fn get_total_sales(&self) -> f64 {
-        self.iter().fold(0.0, |acc, sale| acc + sale.total)
-    }
-
-    fn get_total_profit(&self) -> f64 {
-        self.iter().fold(0.0, |acc, sale| acc + sale.profit)
     }
 }
