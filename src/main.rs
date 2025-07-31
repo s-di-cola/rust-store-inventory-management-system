@@ -5,6 +5,7 @@ mod inventory;
 mod purchase;
 mod report;
 mod sales;
+mod persistence;
 
 use crate::auth::Auth;
 use crate::inventory::{Inventory, Product};

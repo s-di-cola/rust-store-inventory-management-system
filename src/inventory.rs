@@ -1,7 +1,7 @@
+use serde::{Deserialize, Serialize};
 use validator::Validate;
 
-#[derive(Validate, Debug)]
-#[derive(Clone)]
+#[derive(Validate, Debug, Clone, Serialize, Deserialize)]
 pub struct Product {
     #[validate(length(min = 1, max = 50, message = "Product name must be 1-50 characters"))]
     pub name: String,

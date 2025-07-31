@@ -1,8 +1,9 @@
 use crate::inventory::Product;
 use std::time::SystemTime;
+use serde::{Deserialize, Serialize};
 use validator::Validate;
 
-#[derive(Validate, Clone)]
+#[derive(Validate, Clone, Debug, Serialize, Deserialize)]
 pub struct Purchase {
     #[validate(length(min = 1, message = "Product name cannot be empty"))]
     pub product_name: String,
