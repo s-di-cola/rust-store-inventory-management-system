@@ -37,7 +37,7 @@ impl Sales for Vec<Sale> {
         let inventory_product = inventory
             .iter_mut()
             .find(|p| p.name == product_name)
-            .ok_or_else(|| format!("Product {} not found", product_name))?;
+            .ok_or_else(|| format!("Product {product_name} not found"))?;
 
         if inventory_product.quantity < quantity {
             return Err(format!(
@@ -62,7 +62,7 @@ impl Sales for Vec<Sale> {
         };
 
         sale.validate()
-            .map_err(|errors| format!("Validation errors: {:#?}", errors))?;
+            .map_err(|errors| format!("Validation errors: {errors:#?}"))?;
         self.push(sale.clone());
         Ok(sale)
     }

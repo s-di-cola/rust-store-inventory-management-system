@@ -102,12 +102,12 @@ fn main() -> Result<(), Box<dyn std::error::Error>> {
             quantity,
             description,
         } => match inventory.add_item(&name, price, quantity, &description) {
-            Ok(()) => println!("✓ Product {} successfully added", name),
-            Err(err) => println!("⛌ {}", err),
+            Ok(()) => println!("✓ Product {name} successfully added"),
+            Err(err) => println!("⛌ {err}"),
         },
         Commands::RemoveProduct { name } => match inventory.remove_item(&name) {
-            Ok(()) => println!("✓ Product {} successfully removed", name),
-            Err(err) => println!("⛌ {}", err),
+            Ok(()) => println!("✓ Product {name} successfully removed"),
+            Err(err) => println!("⛌ {err}"),
         },
         Commands::UpdateProduct {
             name,
@@ -115,12 +115,12 @@ fn main() -> Result<(), Box<dyn std::error::Error>> {
             quantity,
             description,
         } => match inventory.update_item(&name, price, quantity, &description) {
-            Ok(()) => println!("✓ Product {} successfully updated", name),
-            Err(err) => println!("⛌ {}", err),
+            Ok(()) => println!("✓ Product {name} successfully updated"),
+            Err(err) => println!("⛌ {err}"),
         },
         Commands::ShowProduct { name } => match inventory.get_item(&name) {
-            Some(product) => println!("{:?}", product),
-            None => println!("Product {} not found", name),
+            Some(product) => println!("{product:?}"),
+            None => println!("Product {name} not found"),
         },
         Commands::RecordPurchase {
             product_name,
@@ -141,7 +141,7 @@ fn main() -> Result<(), Box<dyn std::error::Error>> {
                     println!("  Quantity: {}", purchase.quantity);
                     println!("  Total: ${:.2}", purchase.total_cost);
                 }
-                Err(err) => println!("⛌ {}", err),
+                Err(err) => println!("⛌ {err}"),
             }
         }
         Commands::RecordSale {
@@ -156,20 +156,20 @@ fn main() -> Result<(), Box<dyn std::error::Error>> {
                 println!("  Sale Price: ${:.2}", sale.sale_price);
                 println!("  Profit: ${:.2}", sale.profit);
             }
-            Err(err) => println!("⛌ {}", err),
+            Err(err) => println!("⛌ {err}"),
         },
         Commands::Report { report_type } => match report_type {
             ReportType::Inventory => {
                 let report = Reporter::generate_inventory_report(&inventory);
-                println!("{}", report);
+                println!("{report}");
             }
             ReportType::Sales => {
                 let report = Reporter::generate_sales_report(&sales);
-                println!("{}", report);
+                println!("{report}");
             }
             ReportType::Purchase => {
                 let report = Reporter::generate_purchase_report(&purchases);
-                println!("{}", report);
+                println!("{report}");
             }
         },
     }

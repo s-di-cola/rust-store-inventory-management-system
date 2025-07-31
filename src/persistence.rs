@@ -2,7 +2,6 @@ use crate::inventory::Product;
 use crate::purchase::Purchase;
 use crate::sales::Sale;
 use serde::{Deserialize, Serialize};
-use serde_json;
 use serde_json::from_str;
 use std::fs;
 

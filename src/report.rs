@@ -23,8 +23,7 @@ impl Reporter {
         let total_value: f64 = inventory.iter().map(|p| p.price * p.quantity as f64).sum();
         let total_items: u32 = inventory.iter().map(|p| p.quantity).sum();
         report.push_str(&format!(
-            "\nTotal Items: {} | Total Value: ${:.2}\n",
-            total_items, total_value
+            "\nTotal Items: {total_items} | Total Value: ${total_value:.2}\n"
         ));
         report
     }
@@ -52,8 +51,7 @@ impl Reporter {
         let total_sales: f64 = sales.iter().map(|s| s.total).sum();
         let total_profit: f64 = sales.iter().map(|s| s.profit).sum();
         report.push_str(&format!(
-            "\nTotal Sales: ${:.2} | Total Profit: ${:.2}\n",
-            total_sales, total_profit
+            "\nTotal Sales: ${total_sales:.2} | Total Profit: ${total_profit:.2}\n"
         ));
         report
     }
@@ -78,7 +76,7 @@ impl Reporter {
         }
 
         let total_cost: f64 = purchases.iter().map(|p| p.total_cost).sum();
-        report.push_str(&format!("\nTotal Purchase Cost: ${:.2}\n", total_cost));
+        report.push_str(&format!("\nTotal Purchase Cost: ${total_cost:.2}\n"));
         report
     }
 }

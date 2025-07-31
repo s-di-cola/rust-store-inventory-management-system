@@ -17,7 +17,7 @@ impl Auth {
     }
 
     fn read_input(prompt: &str) -> Result<String, String> {
-        print!("{} ", prompt);
+        print!("{prompt} ");
         io::stdout()
             .flush()
             .map_err(|_| "Failed to flush stdout. Please try again")?;

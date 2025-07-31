@@ -44,13 +44,13 @@ impl Purchases for Vec<Purchase> {
         };
         purchase
             .validate()
-            .map_err(|errors| format!("Validation errors: {:#?}", errors))?;
+            .map_err(|errors| format!("Validation errors: {errors:#?}"))?;
 
         match inventory.iter_mut().find(|p| p.name == product_name) {
             Some(product) => {
                 product.quantity += quantity;
             }
-            None {} => {
+            None => {
                 let new_product = Product {
                     name: product_name.to_string(),
                     price: purchase_price,
@@ -60,7 +60,7 @@ impl Purchases for Vec<Purchase> {
 
                 new_product
                     .validate()
-                    .map_err(|errors| format!("Validation errors: {:#?}", errors))?;
+                    .map_err(|errors| format!("Validation errors: {errors:#?}"))?;
 
                 inventory.push(new_product);
             }

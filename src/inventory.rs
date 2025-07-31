@@ -48,12 +48,12 @@ impl Inventory for Vec<Product> {
         };
 
         if self.iter().any(|p| p.name == name) {
-            return Err(format!("Product {} already exists", name));
+            return Err(format!("Product {name} already exists"));
         };
 
         product
             .validate()
-            .map_err(|errors| format!("Validation errors: {:#?}", errors))?;
+            .map_err(|errors| format!("Validation errors: {errors:#?}"))?;
 
         self.push(product);
         Ok(())
@@ -65,7 +65,7 @@ impl Inventory for Vec<Product> {
                 self.remove(index);
                 Ok(())
             }
-            None => Err(format!("Product {} not found", name)),
+            None => Err(format!("Product {name} not found")),
         }
     }
 
@@ -85,7 +85,7 @@ impl Inventory for Vec<Product> {
 
         temp_product
             .validate()
-            .map_err(|errors| format!("Validation errors: {:#?}", errors))?;
+            .map_err(|errors| format!("Validation errors: {errors:#?}"))?;
 
         match self.iter_mut().find(|p| p.name == name) {
             Some(product) => {
@@ -94,7 +94,7 @@ impl Inventory for Vec<Product> {
                 product.description = description.to_string();
                 Ok(())
             }
-            None => Err(format!("Product {} not found", name)),
+            None => Err(format!("Product {name} not found")),
         }
     }
 
