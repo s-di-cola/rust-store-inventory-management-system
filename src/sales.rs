@@ -10,9 +10,9 @@ pub struct Sale {
     pub sale_price: f64,
     #[validate(range(min = 1, message = "Quantity must be at least 1"))]
     pub quantity: u32,
-    profit: f64,
-    total: f64,
-    timestamp: SystemTime,
+    pub(crate) profit: f64,
+    pub(crate) total: f64,
+    pub(crate) timestamp: SystemTime,
 }
 
 trait Sales {
@@ -21,6 +21,7 @@ trait Sales {
         product: &Product,
         quantity: u32,
         sale_price: f64,
+        inventory: &mut Vec<Product>,
     ) -> Result<Sale, String>;
 
     fn get_total_sales(&self) -> f64;
@@ -33,7 +34,22 @@ impl Sales for Vec<Sale> {
         product: &Product,
         quantity: u32,
         sale_price: f64,
+        inventory: &mut Vec<Product>,
     ) -> Result<Sale, String> {
+        let inventory_product = inventory
+            .iter_mut()
+            .find(|p| p.name == product.name)
+            .ok_or_else(|| format!("Product {} not found", product.name))?;
+
+        if inventory_product.quantity < quantity {
+            return Err(format!(
+                "Insufficient stock for '{}'. Available: {}, Requested: {}",
+                product.name, inventory_product.quantity, quantity
+            ));
+        }
+
+        inventory_product.quantity -= quantity;
+
         let sale = Sale {
             product_name: product.name.clone(),
             quantity,

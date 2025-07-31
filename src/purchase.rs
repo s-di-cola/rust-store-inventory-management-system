@@ -9,8 +9,8 @@ pub struct Purchase {
     pub quantity: u32,
     #[validate(range(min = 0.01, message = "Purchase price must be at least 0.01"))]
     pub purchase_price: f64,
-    timestamp: SystemTime,
-    total_cost: f64,
+    pub(crate) timestamp: SystemTime,
+    pub(crate) total_cost: f64,
 }
 
 pub trait Purchases {
