@@ -49,8 +49,8 @@ impl Purchases for Vec<Purchase> {
         match inventory.iter_mut().find(|p| p.name == product_name) {
             Some(product) => {
                 product.quantity += quantity;
-            },
-            None{} => {
+            }
+            None {} => {
                 let new_product = Product {
                     name: product_name.to_string(),
                     price: purchase_price,

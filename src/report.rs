@@ -22,7 +22,10 @@ impl Reporter {
 
         let total_value: f64 = inventory.iter().map(|p| p.price * p.quantity as f64).sum();
         let total_items: u32 = inventory.iter().map(|p| p.quantity).sum();
-        report.push_str(&format!("\nTotal Items: {} | Total Value: ${:.2}\n", total_items, total_value));
+        report.push_str(&format!(
+            "\nTotal Items: {} | Total Value: ${:.2}\n",
+            total_items, total_value
+        ));
         report
     }
 
@@ -37,18 +40,21 @@ impl Reporter {
         for sale in sales {
             report.push_str(&format!(
                 "Product: {} | Qty: {} | Price: ${:.2} | Total: ${:.2} | Profit: ${:.2} | Date: {}\n",
-                sale.product_name, 
-                sale.quantity, 
-                sale.sale_price, 
-                sale.total, 
-                sale.profit, 
+                sale.product_name,
+                sale.quantity,
+                sale.sale_price,
+                sale.total,
+                sale.profit,
                 sale.timestamp.format("%Y-%m-%d %H:%M:%S UTC")
             ));
         }
 
         let total_sales: f64 = sales.iter().map(|s| s.total).sum();
         let total_profit: f64 = sales.iter().map(|s| s.profit).sum();
-        report.push_str(&format!("\nTotal Sales: ${:.2} | Total Profit: ${:.2}\n", total_sales, total_profit));
+        report.push_str(&format!(
+            "\nTotal Sales: ${:.2} | Total Profit: ${:.2}\n",
+            total_sales, total_profit
+        ));
         report
     }
 
@@ -63,10 +69,10 @@ impl Reporter {
         for purchase in purchases {
             report.push_str(&format!(
                 "Product: {} | Qty: {} | Unit Price: ${:.2} | Total: ${:.2} | Date: {}\n",
-                purchase.product_name, 
-                purchase.quantity, 
-                purchase.purchase_price, 
-                purchase.total_cost, 
+                purchase.product_name,
+                purchase.quantity,
+                purchase.purchase_price,
+                purchase.total_cost,
                 purchase.timestamp.format("%Y-%m-%d %H:%M:%S UTC")
             ));
         }

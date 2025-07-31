@@ -9,7 +9,9 @@ mod sales;
 
 use crate::auth::Auth;
 use crate::inventory::{Inventory, Product};
-use crate::persistence::{load_inventory, load_purchases, load_sales, save_inventory, save_purchases, save_sales};
+use crate::persistence::{
+    load_inventory, load_purchases, load_sales, save_inventory, save_purchases, save_sales,
+};
 use crate::purchase::{Purchase, Purchases};
 use crate::report::Reporter;
 use crate::sales::{Sale, Sales};

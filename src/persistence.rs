@@ -1,10 +1,10 @@
-use std::fs;
+use crate::inventory::Product;
+use crate::purchase::Purchase;
+use crate::sales::Sale;
+use serde::{Deserialize, Serialize};
 use serde_json;
 use serde_json::from_str;
-use serde::{Serialize, Deserialize};
-use crate::inventory::Product;
-use crate::sales::Sale;
-use crate::purchase::Purchase;
+use std::fs;
 
 const DATA_DIR: &str = "data";
 const INVENTORY_FILE: &str = "data/inventory.json";
@@ -25,7 +25,7 @@ where
     T: for<'de> Deserialize<'de>,
 {
     ensure_data_dir()?;
-    
+
     if !std::path::Path::new(filename).exists() {
         return Ok(Vec::new());
     }
@@ -40,7 +40,7 @@ where
     T: Serialize,
 {
     ensure_data_dir()?;
-    
+
     let json = serde_json::to_string_pretty(data)?;
     fs::write(filename, json)?;
     Ok(())

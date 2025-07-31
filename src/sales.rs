@@ -24,7 +24,6 @@ pub trait Sales {
         sale_price: f64,
         inventory: &mut Vec<Product>,
     ) -> Result<Sale, String>;
-
 }
 
 impl Sales for Vec<Sale> {
