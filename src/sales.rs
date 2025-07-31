@@ -5,11 +5,11 @@ use validator::Validate;
 #[derive(Validate, Clone)]
 pub struct Sale {
     #[validate(length(min = 1, message = "Product name must be at least 1 character"))]
-    product_name: String,
+    pub product_name: String,
     #[validate(range(min = 0.0, message = "Sale price must be greater than 0"))]
-    sale_price: f64,
+    pub sale_price: f64,
     #[validate(range(min = 1, message = "Quantity must be at least 1"))]
-    quantity: u32,
+    pub quantity: u32,
     profit: f64,
     total: f64,
     timestamp: SystemTime,
