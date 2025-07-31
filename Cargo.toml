@@ -5,4 +5,4 @@ edition = "2024"
 
 [dependencies]
 validator = { version = "0.20.0", features = ["derive"] }
-serde = { version = "1.0.219", features = ["derive"] }
+clap = { version = "4.5.42", features = ["derive"] }
