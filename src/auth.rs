@@ -4,7 +4,6 @@ pub struct Auth;
 
 impl Auth {
     pub fn authenticate() -> Result<(), String> {
-        println!("=== Store Management System ===");
         println!("Please login to continue");
 
         let username = Self::read_input("Username:")?;
@@ -18,7 +17,7 @@ impl Auth {
     }
 
     fn read_input(prompt: &str) -> Result<String, String> {
-        println!("{}", prompt);
+        print!("{} ", prompt);
         io::stdout()
             .flush()
             .map_err(|_| "Failed to flush stdout. Please try again")?;

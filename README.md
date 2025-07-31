@@ -49,36 +49,46 @@ The system requires authentication before accessing any functionality:
 Add a new product to the inventory:
 ```bash
 cargo run -- add-product --name "Product Name" --price 19.99 --quantity 100 --description "Product description"
+# Or using short flags:
+cargo run -- add-product -n "Product Name" -p 19.99 -q 100 -d "Product description"
 ```
 
 #### Update Product
 Update an existing product's details:
 ```bash
 cargo run -- update-product --name "Product Name" --price 24.99 --quantity 150 --description "Updated description"
+# Or using short flags:
+cargo run -- update-product -n "Product Name" -p 24.99 -q 150 -d "Updated description"
 ```
 
 #### Remove Product
 Remove a product from inventory:
 ```bash
-cargo run -- remove-product --name "Product Name"
+cargo run -- remove-product "Product Name"
 ```
 
 #### View Product
 View details of a specific product:
 ```bash
-cargo run -- view-product --name "Product Name"
+cargo run -- show-product --name "Product Name"
+# Or using short flags:
+cargo run -- show-product -n "Product Name"
 ```
 
 #### Record Purchase
 Record a purchase and automatically update inventory:
 ```bash
 cargo run -- record-purchase --product-name "Product Name" --quantity 50 --purchase-price 15.00 --description "Supplier ABC"
+# Or using short flags:
+cargo run -- record-purchase -n "Product Name" -q 50 -p 15.00 -d "Supplier ABC"
 ```
 
 #### Record Sale
 Record a sale and update inventory:
 ```bash
 cargo run -- record-sale --product-name "Product Name" --quantity 5 --sale-price 25.00
+# Or using short flags:
+cargo run -- record-sale -n "Product Name" -q 5 -s 25.00
 ```
 
 #### Generate Reports
@@ -87,16 +97,22 @@ Generate various types of reports:
 **Inventory Report:**
 ```bash
 cargo run -- report --report-type inventory
+# Or using short flags:
+cargo run -- report -r inventory
 ```
 
 **Sales Report:**
 ```bash
 cargo run -- report --report-type sales
+# Or using short flags:
+cargo run -- report -r sales
 ```
 
 **Purchase Report:**
 ```bash
 cargo run -- report --report-type purchase
+# Or using short flags:
+cargo run -- report -r purchase
 ```
 
 ## Project Structure
@@ -153,4 +169,3 @@ The system includes comprehensive error handling for:
 - Password-protected access
 - Input validation and sanitization
 - Safe memory management with Rust's ownership system
-

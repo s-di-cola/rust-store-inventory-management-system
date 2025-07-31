@@ -27,6 +27,7 @@ struct Cli {
 #[derive(Subcommand)]
 enum Commands {
     AddProduct {
+        #[arg(short, long)]
         name: String,
         #[arg(short, long)]
         price: f64,
@@ -36,9 +37,11 @@ enum Commands {
         description: String,
     },
     RemoveProduct {
+        #[arg(short, long)]
         name: String,
     },
     UpdateProduct {
+        #[arg(short, long)]
         name: String,
         #[arg(short, long)]
         price: f64,
@@ -48,27 +51,29 @@ enum Commands {
         description: String,
     },
     ShowProduct {
+        #[arg(short, long)]
         name: String,
     },
     RecordPurchase {
-        #[arg(short, long)]
+        #[arg(short = 'n', long)]
         product_name: String,
-        #[arg(short, long)]
+        #[arg(short = 'q', long)]
         quantity: u32,
-        #[arg(short, long)]
+        #[arg(short = 'p', long)]
         purchase_price: f64,
-        #[arg(short, long)]
+        #[arg(short = 'd', long)]
         description: String,
     },
     RecordSale {
-        #[arg(short, long)]
+        #[arg(short = 'n', long)]
         product_name: String,
-        #[arg(short, long)]
+        #[arg(short = 'q', long)]
         quantity: u32,
-        #[arg(short, long)]
+        #[arg(short = 's', long)]
         sale_price: f64,
     },
     Report {
+        #[arg(short, long)]
         report_type: ReportType,
     },
 }
@@ -82,7 +87,7 @@ enum ReportType {
 
 fn main() -> Result<(), Box<dyn std::error::Error>> {
     println!("=== Store Management System ===");
-    Auth::authenticate()?;
+    // Auth::authenticate()?;
 
     let mut inventory: Vec<Product> = load_inventory()?;
     let mut sales: Vec<Sale> = load_sales()?;

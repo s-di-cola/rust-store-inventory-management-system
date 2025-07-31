@@ -1,54 +1,77 @@
 use crate::inventory::Product;
-use crate::purchase::{Purchase, Purchases};
-use crate::sales::{Sale, Sales};
+use crate::purchase::Purchase;
+use crate::sales::Sale;
 
 pub struct Reporter;
 
 impl Reporter {
-    pub fn generate_inventory_report(inventory: &Vec<Product>) -> String {
-        let mut report = String::from("INVENTORY REPORT\n");
-        report.push_str("================\n");
+    pub fn generate_inventory_report(inventory: &[Product]) -> String {
+        let mut report = String::from("INVENTORY REPORT\n================\n");
+
+        if inventory.is_empty() {
+            report.push_str("No products in inventory.\n");
+            return report;
+        }
 
         for product in inventory {
             report.push_str(&format!(
-                "Product: {} | Price: ${:.2} | Qty: {} | Desc: {}\n",
+                "Product: {} | Price: ${:.2} | Qty: {} | Description: {}\n",
                 product.name, product.price, product.quantity, product.description
             ));
         }
 
-        report.push_str(&format!("\nTotal Products: {}\n", inventory.len()));
+        let total_value: f64 = inventory.iter().map(|p| p.price * p.quantity as f64).sum();
+        let total_items: u32 = inventory.iter().map(|p| p.quantity).sum();
+        report.push_str(&format!("\nTotal Items: {} | Total Value: ${:.2}\n", total_items, total_value));
         report
     }
 
-    pub fn generate_sales_report(sales: &Vec<Sale>) -> String {
-        let mut report = String::from("SALES REPORT\n");
-        report.push_str("============\n");
+    pub fn generate_sales_report(sales: &[Sale]) -> String {
+        let mut report = String::from("SALES REPORT\n============\n");
+
+        if sales.is_empty() {
+            report.push_str("No sales recorded.\n");
+            return report;
+        }
 
         for sale in sales {
             report.push_str(&format!(
-                "Product: {} | Qty: {} | Price: ${:.2} | Total: ${:.2} | Profit: ${:.2}\n | Date: {:?}\n",
-                sale.product_name, sale.quantity, sale.sale_price, sale.total, sale.profit, sale.timestamp
+                "Product: {} | Qty: {} | Price: ${:.2} | Total: ${:.2} | Profit: ${:.2} | Date: {}\n",
+                sale.product_name, 
+                sale.quantity, 
+                sale.sale_price, 
+                sale.total, 
+                sale.profit, 
+                sale.timestamp.format("%Y-%m-%d %H:%M:%S UTC")
             ));
         }
 
-        let total_sales: f64 = sales.get_total_sales();
-        let total_profit: f64 = sales.get_total_profit();
+        let total_sales: f64 = sales.iter().map(|s| s.total).sum();
+        let total_profit: f64 = sales.iter().map(|s| s.profit).sum();
         report.push_str(&format!("\nTotal Sales: ${:.2} | Total Profit: ${:.2}\n", total_sales, total_profit));
         report
     }
 
-    pub fn generate_purchase_report(purchases: &Vec<Purchase>) -> String {
-        let mut report = String::from("PURCHASE REPORT\n");
-        report.push_str("===============\n");
+    pub fn generate_purchase_report(purchases: &[Purchase]) -> String {
+        let mut report = String::from("PURCHASE REPORT\n===============\n");
+
+        if purchases.is_empty() {
+            report.push_str("No purchases recorded.\n");
+            return report;
+        }
 
         for purchase in purchases {
             report.push_str(&format!(
-                "Product: {} | Qty: {} | Unit Price: ${:.2} | Total: ${:.2}\n, Date: {:?}\n",
-                purchase.product_name, purchase.quantity, purchase.purchase_price, purchase.total_cost, purchase.timestamp
+                "Product: {} | Qty: {} | Unit Price: ${:.2} | Total: ${:.2} | Date: {}\n",
+                purchase.product_name, 
+                purchase.quantity, 
+                purchase.purchase_price, 
+                purchase.total_cost, 
+                purchase.timestamp.format("%Y-%m-%d %H:%M:%S UTC")
             ));
         }
 
-        let total_cost: f64 = purchases.get_total_purchases();
+        let total_cost: f64 = purchases.iter().map(|p| p.total_cost).sum();
         report.push_str(&format!("\nTotal Purchase Cost: ${:.2}\n", total_cost));
         report
     }

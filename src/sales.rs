@@ -1,5 +1,5 @@
 use crate::inventory::Product;
-use std::time::SystemTime;
+use chrono::{DateTime, Utc};
 use serde::{Deserialize, Serialize};
 use validator::Validate;
 
@@ -7,13 +7,13 @@ use validator::Validate;
 pub struct Sale {
     #[validate(length(min = 1, message = "Product name must be at least 1 character"))]
     pub product_name: String,
-    #[validate(range(min = 0.0, message = "Sale price must be greater than 0"))]
-    pub sale_price: f64,
     #[validate(range(min = 1, message = "Quantity must be at least 1"))]
     pub quantity: u32,
-    pub(crate) profit: f64,
-    pub(crate) total: f64,
-    pub(crate) timestamp: SystemTime,
+    #[validate(range(min = 0.01, message = "Sale price must be greater than 0"))]
+    pub sale_price: f64,
+    pub profit: f64,
+    pub total: f64,
+    pub timestamp: DateTime<Utc>,
 }
 
 pub trait Sales {
@@ -61,7 +61,7 @@ impl Sales for Vec<Sale> {
                 sale_total - cost
             },
             total: sale_price * quantity as f64,
-            timestamp: SystemTime::now(),
+            timestamp: Utc::now(),
         };
 
         sale.validate()
