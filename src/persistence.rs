@@ -6,15 +6,26 @@ use crate::inventory::Product;
 use crate::sales::Sale;
 use crate::purchase::Purchase;
 
-const INVENTORY_FILE: &str = "inventory.json";
-const SALES_FILE: &str = "sales.json";
-const PURCHASES_FILE: &str = "purchases.json";
+const DATA_DIR: &str = "data";
+const INVENTORY_FILE: &str = "data/inventory.json";
+const SALES_FILE: &str = "data/sales.json";
+const PURCHASES_FILE: &str = "data/purchases.json";
+
+// Ensure data directory exists
+fn ensure_data_dir() -> Result<(), Box<dyn std::error::Error>> {
+    if !std::path::Path::new(DATA_DIR).exists() {
+        fs::create_dir(DATA_DIR)?;
+    }
+    Ok(())
+}
 
 // Generic load function
 fn load_data<T>(filename: &str) -> Result<Vec<T>, Box<dyn std::error::Error>>
 where
     T: for<'de> Deserialize<'de>,
 {
+    ensure_data_dir()?;
+    
     if !std::path::Path::new(filename).exists() {
         return Ok(Vec::new());
     }
@@ -28,6 +39,8 @@ fn save_data<T>(data: &Vec<T>, filename: &str) -> Result<(), Box<dyn std::error:
 where
     T: Serialize,
 {
+    ensure_data_dir()?;
+    
     let json = serde_json::to_string_pretty(data)?;
     fs::write(filename, json)?;
     Ok(())
