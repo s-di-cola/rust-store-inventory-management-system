@@ -1,17 +1,18 @@
 # Rust Store Inventory Management System
 
-A comprehensive command-line inventory management system for small retail stores, built with Rust. This system provides secure authentication, product management, sales tracking, purchase recording, and detailed reporting capabilities.
+A comprehensive command-line inventory management system for small retail stores, built with Rust. This system provides secure authentication, product management, sales tracking, purchase recording, detailed reporting capabilities, and persistent data storage.
 
 ## Features
 
 - **Authentication**: Secure login system for store managers
-- **Product Management**: Add, update, remove, and view products
+- **Product Management**: Add, update, remove, and view products with validation
 - **Inventory Tracking**: Real-time inventory quantity management
-- **Sales Recording**: Track sales with profit calculations
+- **Sales Recording**: Track sales with automatic profit calculations
 - **Purchase Management**: Record purchases and automatically update inventory
-- **Reporting**: Generate detailed reports for inventory, sales, and purchases
+- **Reporting**: Generate detailed reports with human-readable timestamps
+- **Data Persistence**: JSON-based storage in organized `data/` directory
 - **Data Validation**: Input validation using the `validator` crate
-- **CLI Interface**: User-friendly command-line interface with `clap`
+- **CLI Interface**: User-friendly command-line interface with short and long flags
 
 ## Installation
 
@@ -92,7 +93,7 @@ cargo run -- record-sale -n "Product Name" -q 5 -s 25.00
 ```
 
 #### Generate Reports
-Generate various types of reports:
+Generate various types of reports with human-readable timestamps:
 
 **Inventory Report:**
 ```bash
@@ -124,7 +125,13 @@ src/
 ├── inventory.rs     # Product and inventory management
 ├── sales.rs         # Sales recording and tracking
 ├── purchase.rs      # Purchase recording and inventory updates
-└── report.rs        # Report generation
+├── report.rs        # Report generation with formatted timestamps
+└── persistence.rs   # Generic data persistence with JSON storage
+
+data/                # Data storage directory (auto-created)
+├── inventory.json   # Product inventory data
+├── sales.json       # Sales transaction history
+└── purchases.json   # Purchase transaction history
 ```
 
 ## Data Models
@@ -139,21 +146,30 @@ src/
 - `product_name`: String
 - `quantity`: u32
 - `sale_price`: f64
-- `profit`: f64 (calculated)
-- `timestamp`: SystemTime
+- `profit`: f64 (calculated automatically)
+- `total`: f64 (calculated automatically)
+- `timestamp`: DateTime<Utc> (formatted as "YYYY-MM-DD HH:MM:SS UTC")
 
 ### Purchase
 - `product_name`: String
 - `quantity`: u32
 - `purchase_price`: f64
-- `total_cost`: f64 (calculated)
-- `timestamp`: SystemTime
+- `total_cost`: f64 (calculated automatically)
+- `timestamp`: DateTime<Utc> (formatted as "YYYY-MM-DD HH:MM:SS UTC")
 
 ## Dependencies
 
-- `clap`: Command-line argument parsing
-- `validator`: Data validation
-- `std::time`: Timestamp functionality
+- `clap`: Command-line argument parsing with short and long flags
+- `validator`: Data validation with custom error messages
+- `serde` & `serde_json`: JSON serialization and deserialization
+- `chrono`: Date and time handling with human-readable formatting
+
+## Data Storage
+
+- **Location**: All data files are stored in the `data/` directory
+- **Format**: JSON files for easy inspection and portability
+- **Auto-creation**: The `data/` directory is created automatically if it doesn't exist
+- **Persistence**: Data is automatically saved after each operation
 
 ## Error Handling
 
@@ -162,10 +178,32 @@ The system includes comprehensive error handling for:
 - Product not found scenarios
 - Insufficient inventory for sales
 - Data validation failures
-- Input/output errors
+- File I/O operations
+- JSON parsing errors
 
 ## Security Features
 
-- Password-protected access
-- Input validation and sanitization
+- Password-protected access with authentication requirement
+- Input validation and sanitization for all user inputs
 - Safe memory management with Rust's ownership system
+- Proper error handling without exposing sensitive information
+
+## CLI Short Flags
+
+For faster usage, the following short flags are available:
+- `-n, --name` or `--product-name`: Product name
+- `-p, --price` or `--purchase-price`: Price/purchase price
+- `-q, --quantity`: Quantity
+- `-d, --description`: Description
+- `-s, --sale-price`: Sale price
+- `-r, --report-type`: Report type (inventory, sales, purchase)
+
+## Example Output
+
+### Sales Report
+```
+SALES REPORT
+============
+Product: Apple | Qty: 5 | Price: $1.50 | Total: $7.50 | Profit: $2.50 | Date: 2025-07-31 14:39:43 UTC
+
+Total Sales: $7.50 | Total Profit: $2.50
