@@ -13,6 +13,7 @@ A comprehensive command-line inventory management system for small retail stores
 - **Data Persistence**: JSON-based storage in organized `data/` directory
 - **Data Validation**: Input validation using the `validator` crate
 - **CLI Interface**: User-friendly command-line interface with short and long flags
+- **Comprehensive Testing**: Full test suite covering all core functionality
 
 ## Installation
 
@@ -36,6 +37,46 @@ A comprehensive command-line inventory management system for small retail stores
    ```bash
    cargo run -- --help
    ```
+
+## Testing
+
+The system includes a comprehensive test suite with 13 unit tests covering all core functionality:
+
+### Running Tests
+```bash
+# Run all tests
+cargo test
+
+# Run tests with verbose output
+cargo test -- --nocapture
+
+# Run specific test module
+cargo test inventory::tests
+cargo test purchase::tests
+cargo test sales::tests
+```
+
+### Test Coverage
+- **Inventory Management Tests** (5 tests):
+  - `test_add_item`: Validates successful product addition
+  - `test_remove_item`: Validates product removal
+  - `test_update_item`: Validates product updates
+  - `test_get_item`: Validates product retrieval
+  - `test_add_invalid_item`: Validates input validation for invalid products
+
+- **Purchase Management Tests** (5 tests):
+  - `test_record_purchase`: Validates successful purchase recording
+  - `test_record_purchase_invalid_product_name`: Validates empty product name rejection
+  - `test_record_purchase_invalid_quantity`: Validates zero quantity rejection
+  - `test_record_purchase_invalid_price`: Validates zero price rejection
+  - `test_record_purchase_invalid_description`: Validates empty description rejection
+
+- **Sales Management Tests** (3 tests):
+  - `test_record_sale`: Validates successful sale recording
+  - `test_record_sale_insufficient_stock`: Validates insufficient inventory handling
+  - `test_record_sale_invalid_product_name`: Validates product existence validation
+
+All tests use proper error handling and validate both successful operations and edge cases.
 
 ## Usage
 

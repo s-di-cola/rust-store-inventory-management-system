@@ -10,7 +10,6 @@ const INVENTORY_FILE: &str = "data/inventory.json";
 const SALES_FILE: &str = "data/sales.json";
 const PURCHASES_FILE: &str = "data/purchases.json";
 
-// Ensure data directory exists
 fn ensure_data_dir() -> Result<(), Box<dyn std::error::Error>> {
     if !std::path::Path::new(DATA_DIR).exists() {
         fs::create_dir(DATA_DIR)?;
@@ -18,7 +17,6 @@ fn ensure_data_dir() -> Result<(), Box<dyn std::error::Error>> {
     Ok(())
 }
 
-// Generic load function
 fn load_data<T>(filename: &str) -> Result<Vec<T>, Box<dyn std::error::Error>>
 where
     T: for<'de> Deserialize<'de>,
