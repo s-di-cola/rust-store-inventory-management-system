@@ -1,7 +1,7 @@
 use serde::{Deserialize, Serialize};
 use validator::Validate;
 
-#[derive(Validate, Debug, Clone, Serialize, Deserialize)]
+#[derive(Validate, Debug, Clone, Serialize, Deserialize,PartialEq)]
 pub struct Product {
     #[validate(length(min = 1, max = 50, message = "Product name must be 1-50 characters"))]
     pub name: String,
@@ -100,5 +100,65 @@ impl Inventory for Vec<Product> {
 
     fn get_item(&self, name: &str) -> Option<&Product> {
         self.iter().find(|p| p.name == name)
+    }
+}
+
+
+mod tests {
+    use super::*;
+
+    #[test]
+    fn test_add_item() -> Result<(), String> {
+        let mut inventory: Vec<Product> = Vec::new();
+        inventory.add_item("Test Product", 10.0, 5, "Test description")?;
+        assert_eq!(inventory.get_item("Test Product").unwrap(), &Product {
+            name: "Test Product".to_string(),
+            price: 10.0,
+            quantity: 5,
+            description: "Test description".to_string(),
+        });
+        Ok(())
+    }
+
+    #[test]
+    fn test_remove_item() -> Result<(), String> {
+        let mut inventory: Vec<Product> = Vec::new();
+        inventory.add_item("Test Product", 10.0, 5, "Test description")?;
+        inventory.remove_item("Test Product")?;
+        assert!(inventory.get_item("Test Product").is_none());
+        Ok(())
+    }
+
+    #[test]
+    fn test_update_item() -> Result<(), String> {
+        let mut inventory: Vec<Product> = Vec::new();
+        inventory.add_item("Test Product", 10.0, 5, "Test description")?;
+        inventory.update_item("Test Product", 20.0, 10, "Updated description")?;
+        assert_eq!(inventory.get_item("Test Product").unwrap(), &Product {
+            name: "Test Product".to_string(),
+            price: 20.0,
+            quantity: 10,
+            description: "Updated description".to_string(),
+        });
+        Ok(())
+    }
+
+    #[test]
+    fn test_get_item() -> Result<(), String> {
+        let mut inventory: Vec<Product> = Vec::new();
+        inventory.add_item("Test Product", 10.0, 5, "Test description")?;
+        assert_eq!(inventory.get_item("Test Product").unwrap(), &Product {
+            name: "Test Product".to_string(),
+            price: 10.0,
+            quantity: 5,
+            description: "Test description".to_string(),
+        });
+        Ok(())
+    }
+
+    #[test]
+    fn test_add_invalid_item()  {
+        let mut inventory: Vec<Product> = Vec::new();
+        assert!(inventory.add_item("", 10.0, 5, "Test description").is_err());
     }
 }
