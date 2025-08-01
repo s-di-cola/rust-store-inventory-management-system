@@ -67,3 +67,49 @@ impl Sales for Vec<Sale> {
         Ok(sale)
     }
 }
+
+
+#[cfg(test)]
+mod tests {
+    use crate::inventory::Inventory;
+    use super::*;
+
+    #[test]
+    fn test_record_sale() {
+        let mut sales = Vec::new();
+        let mut inventory = vec![Product {
+            name: "Test Product".to_string(),
+            price: 10.0,
+            quantity: 10,
+            description: "Test description".to_string(),
+        }];
+        assert!(sales.record_sale("Test Product", 5, 5.0, &mut inventory).is_ok());
+        assert_eq!(inventory.get_item("Test Product").unwrap().quantity, 5);
+    }
+
+    #[test]
+    fn test_record_sale_insufficient_stock() {
+        let mut sales = Vec::new();
+        let mut inventory = vec![Product {
+            name: "Test Product".to_string(),
+            price: 10.0,
+            quantity: 5,
+            description: "Test description".to_string(),
+        }];
+        assert!(sales.record_sale("Test Product", 6, 5.0, &mut inventory).is_err());
+        assert_eq!(inventory.get_item("Test Product").unwrap().quantity, 5);
+    }
+
+    #[test]
+    fn test_record_sale_invalid_product_name() {
+        let mut sales = Vec::new();
+        let mut inventory = vec![Product {
+            name: "Test Product".to_string(),
+            price: 10.0,
+            quantity: 10,
+            description: "Test description".to_string(),
+        }];
+        assert!(sales.record_sale("", 5, 5.0, &mut inventory).is_err());
+        assert_eq!(inventory.get_item("Test Product").unwrap().quantity, 10);
+    }
+}
