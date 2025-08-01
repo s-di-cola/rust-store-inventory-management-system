@@ -1,4 +1,4 @@
-use crate::inventory::Product;
+use crate::inventory::{Inventory, Product};
 use chrono::{DateTime, Utc};
 use serde::{Deserialize, Serialize};
 use validator::Validate;
@@ -67,5 +67,50 @@ impl Purchases for Vec<Purchase> {
         }
         self.push(purchase.clone());
         Ok(purchase)
+    }
+}
+
+mod tests {
+    use super::*;
+
+    #[test]
+    fn test_record_purchase()-> Result<(), String> {
+        let mut inventory: Vec<Product> = Vec::new();
+        let mut purchases: Vec<Purchase> = Vec::new();
+        purchases.record_purchase("Test Product", 5, 10.0, "Test description", &mut inventory)?;
+        assert_eq!(inventory.get_item("Test Product").unwrap().quantity, 5);
+        Ok(())
+    }
+
+    #[test]
+    fn test_record_purchase_invalid_product_name()-> Result<(), String> {
+        let mut inventory: Vec<Product> = Vec::new();
+        let mut purchases: Vec<Purchase> = Vec::new();
+        assert!(purchases.record_purchase("", 5, 10.0, "Test description", &mut inventory).is_err());
+        Ok(())
+    }
+
+    #[test]
+    fn test_record_purchase_invalid_quantity()-> Result<(), String> {
+        let mut inventory: Vec<Product> = Vec::new();
+        let mut purchases: Vec<Purchase> = Vec::new();
+        assert!(purchases.record_purchase("Test Product", 0, 10.0, "Test description", &mut inventory).is_err());
+        Ok(())
+    }
+
+    #[test]
+    fn test_record_purchase_invalid_price()-> Result<(), String> {
+        let mut inventory: Vec<Product> = Vec::new();
+        let mut purchases: Vec<Purchase> = Vec::new();
+        assert!(purchases.record_purchase("Test Product", 5, 0.0, "Test description", &mut inventory).is_err());
+        Ok(())
+    }
+
+    #[test]
+    fn test_record_purchase_invalid_description()-> Result<(), String> {
+        let mut inventory: Vec<Product> = Vec::new();
+        let mut purchases: Vec<Purchase> = Vec::new();
+        assert!(purchases.record_purchase("Test Product", 5, 10.0, "", &mut inventory).is_err());
+        Ok(())
     }
 }
